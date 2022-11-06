@@ -1,4 +1,4 @@
-# sudomemoDNS
+# insigniaDNS
 
 from datetime import datetime
 from json import loads
@@ -27,7 +27,7 @@ def get_platform():
     return platforms[platform]
 
 
-SUDOMEMODNS_VERSION = "1.2.1"
+insigniaDNS_VERSION = "1.0"
 
 
 # Adds preceding zeros to IP addresses
@@ -55,13 +55,13 @@ SERIAL = int((datetime.utcnow() - EPOCH).total_seconds())
 MY_IP = get_ip()
 
 print("+===============================+")
-print("|      Sudomemo DNS Server      |")
-print(f"|         Version {SUDOMEMODNS_VERSION}         |")
+print("|      Insignia DNS Server      |")
+print(f"|         Version {insigniaDNS_VERSION}         |")
 print("+===============================+\n")
 
-print("== Welcome to sudomemoDNS! ==")
+print("== Welcome to insigniaDNS! ==")
 print(
-    "This server will allow you to connect to Sudomemo when your Internet Service Provider does not work with custom DNS.\n")
+    "This server will allow you to connect to Insignia when your Internet Service Provider does not work with custom DNS.\n")
 
 print("== How To Use ==")
 print("First, make sure that your console is connected to the same network as this computer.\n")
@@ -69,13 +69,13 @@ print("First, make sure that your console is connected to the same network as th
 print("Then, put these settings in for DNS on your console:")
 print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 print(f"Primary DNS:   {format_ip(MY_IP)}")
-print("Secondary DNS: 008.008.008.008")
+print("Secondary DNS: 001.001.001.001")
 print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
 
 print("== Getting Help ==")
-print("Need help? Visit our Discord server or check out https://support.sudomemo.net\n")
+print("Need help? Visit our Discord server or check out https://support.insignia.live\n")
 
-print("[INFO] Starting sudomemoDNS...")
+print("[INFO] Starting insigniaDNS...")
 
 TYPE_LOOKUP = {
     A: QTYPE.A,
@@ -90,7 +90,7 @@ TYPE_LOOKUP = {
 
 # Can't seem to turn off DNSLogger with a None type so let's just null it out with a dummy function
 
-class SudomemoDNSLogger(object):
+class insigniaDNSLogger(object):
     def log_recv(self, handler, data):
         pass
 
@@ -165,10 +165,10 @@ class Record:
 ZONES = {}
 
 try:
-    get_zones = get("https://www.sudomemo.net/api/dns_zones.json",
-                    headers={'User-Agent': 'SudomemoDNS/' + SUDOMEMODNS_VERSION + ' (' + get_platform() + ')'})
+    get_zones = get("https://insignia.live/dns_zones.json",
+                    headers={'User-Agent': 'insigniaDNS/' + insigniaDNS_VERSION + ' (' + get_platform() + ')'})
 except Timeout:
-    print("[ERROR] Unable to load DNS data: Connection to Sudomemo timed out. Are you connected to the Internet?")
+    print("[ERROR] Unable to load DNS data: Connection to Insignia timed out. Are you connected to the Internet?")
 except RequestException as e:
     print("[ERROR] Unable load DNS data.")
     print("[ERROR] Exception: ", e)
@@ -176,7 +176,7 @@ except RequestException as e:
 try:
     zones = loads(get_zones.text)
 except ValueError as e:
-    print("[ERROR] Unable load DNS data: Invalid response from server. Check that you can visit sudomemo.net")
+    print("[ERROR] Unable load DNS data: Invalid response from server. Check that you can visit insignia.live")
 
 for zone in zones:
     if zone["type"] == "a":
@@ -215,7 +215,7 @@ class Resolver:
 
 
 resolver = Resolver()
-dnsLogger = SudomemoDNSLogger()
+dnsLogger = insigniaDNSLogger()
 
 print("[INFO] Detected operating system:", get_platform())
 
@@ -243,7 +243,7 @@ except PermissionError:
     print("[ERROR] Permission error: Check that you are running this as an administrator or root")
     exit(1)
 
-print("[INFO] sudomemoDNS is ready. Now waiting for DNS requests from your console...")
+print("[INFO] insigniaDNS is ready. Now waiting for DNS requests from your console...")
 
 if __name__ == '__main__':
     for s in servers:
