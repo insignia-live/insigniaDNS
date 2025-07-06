@@ -1,6 +1,6 @@
 # insigniaDNS
 
-from datetime import datetime
+from datetime import datetime, timezone
 from json import loads
 from socket import socket, AF_INET, SOCK_DGRAM, gethostbyname
 from sys import platform
@@ -49,9 +49,7 @@ def get_ip():
         s.close()
     return IP
 
-
-EPOCH = datetime(1970, 1, 1)
-SERIAL = int((datetime.utcnow() - EPOCH).total_seconds())
+SERIAL = int(datetime.now(timezone.utc).timestamp())
 MY_IP = get_ip()
 
 print("+===============================+")
